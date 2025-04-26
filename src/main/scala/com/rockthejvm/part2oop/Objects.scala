@@ -29,7 +29,7 @@ object Objects {
   val bigFoot = BigFoot
   /*
   Scala compiles to JVM bytecode
-  JVM understands a class with a static void main(args: Array["String])
+  JVM understands (needs) a class with a static void main(args: Array["String])
 
   in Java:
     class MyApplication {
@@ -46,6 +46,7 @@ object Objects {
     println(theSingleton == anotherSingleton)
     println(MySingleton.aField)
     println(MySingleton.aMethod(5))
+    println(theSingleton.aMethod(5))
 
     println(bigFoot.sayHi)
   }
