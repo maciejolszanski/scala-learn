@@ -37,6 +37,28 @@ object Lists {
   val total = aList.reduce((a, b) => a + b)
   val total_v2 = aList.reduce(_ + _)
 
+  // map - transforms a list by applying a function to every element
+  /* in imperative language it'd be:
+
+    val anArray = [1, 2, 3]
+    va result = Array[3]
+    for (int i=0, i < anArray.size; i++)
+      result[i] = anArray[i * 3]
+    return result
+  */
+  val tenxList = aList.map(x => x * 10) // [10,20,30]
+  val scalaList = aList.map(x => s"Scala $x")
+
+  // filter - transform a list by just keeping the items satisfying a boolean function
+  val evenNumbers = aList.filter(x => x % 2 == 0) // [2] - a new list, the original one is kept intact
+
+  // higher-order functions = take other functions as arguments/return functions as results
+
+  // flatMap - transform a List by applying the functions to every element  + combining the mini-list obtained into one big list
+  val expandedList = aList.map(x => List(x, x+1)) // [List(1, 2), List(2, 3), List(3, 4)]
+  val expandedList_v2 = aList.flatMap(x => List(x, x+1)) // [1, 2, 2, 3, 3, 4]
+
+
   def main(args: Array[String]): Unit = {
     println(aList.toString)
     println(aList) // the same
@@ -50,5 +72,10 @@ object Lists {
 
     println(total)
     println(total_v2)
+
+    println(tenxList)
+    println(scalaList)
+
+    println(evenNumbers)
   }
 }
