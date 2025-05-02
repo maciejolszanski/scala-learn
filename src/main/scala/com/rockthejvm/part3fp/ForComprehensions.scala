@@ -21,8 +21,8 @@ object ForComprehensions {
   Exercises - generate a checkerboard from numbers 1-8 and letters A-H
   */
   val chessboard = for {
-    letter <- List("A", "B", "C", "D", "E", "F", "G", "H")
-    number <- List(1, 2, 3, 4, 5, 6, 7, 8)
+    letter <- ('A' to 'H').toList
+    number <- (1 to 8).toList
   } yield s"$letter$number"
 
   def main(args: Array[String]): Unit = {
