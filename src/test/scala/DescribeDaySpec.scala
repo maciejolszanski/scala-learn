@@ -19,7 +19,7 @@ class DescribeDaySpec extends AnyFunSuite {
     assert(describeDay("Wednesday") == "Just Another Day")
   }
 
-  test("is case-sensitive (Monday ≠ monday)") {
+  test("is case-sensitive (Monday != monday)") {
     assert(describeDay("monday") == "Just Another Day")
   }
 }
