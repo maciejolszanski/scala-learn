@@ -3,11 +3,12 @@ package exercises
 object DayUtils {
 
   def describeDay(day: String): String = {
-    day match {
-      case "Monday"               => "Start of the Week"
-      case "Saturday" | "Sunday"  => "Weekend!"
-      case _                      => "Just Another Day"
-    }
+    val dayDescription: Map[String, String] = Map(
+      "Monday"    -> "Start of the Week",
+      "Saturday"  -> "Weekend!",
+      "Sunday"    -> "Weekend!"
+    )
+    dayDescription.getOrElse(day, "Just Another Day")
   }
 
   def main(args: Array[String]): Unit = {
