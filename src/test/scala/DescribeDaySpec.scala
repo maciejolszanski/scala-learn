@@ -1,4 +1,4 @@
-import exercises.DayUtils.describeDay
+import exercises.simplest.DayUtils.describeDay
 import org.scalatest.funsuite.AnyFunSuite
 
 class DescribeDaySpec extends AnyFunSuite {

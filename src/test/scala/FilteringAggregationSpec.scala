@@ -1,4 +1,4 @@
-import exercises.FilteringAggregation.sumEvenNumbers
+import exercises.simplest.FilteringAggregation.sumEvenNumbers
 import org.scalatest.funsuite.AnyFunSuite
 
 class FilteringAggregationSpec extends AnyFunSuite {
