@@ -25,21 +25,4 @@ object SensorProcessor {
     if count > 0 then sum / count
     else 0.0
   }
-
-
-  def main(args: Array[String]): Unit = {
-    val inputReadings: List[SensorReading] = List(
-      SensorReading(1, -1.0),
-      SensorReading(2, 23.1),
-      SensorReading(3, 26.0),
-      SensorReading(4, 45.4),
-      SensorReading(5, 0.0)
-    )
-
-    println(avgReadings_v2(inputReadings))
-  }
 }
-
-//Zadanie: Oblicz średnią temperatur z listy SensorReading. Nie używaj wbudowanej funkcji sum.
-//
-//  Cel: foldLeft.

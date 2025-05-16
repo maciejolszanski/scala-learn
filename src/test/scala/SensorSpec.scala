@@ -1,29 +1,31 @@
 import exercises.sensor.SensorReading
 import exercises.sensor.SensorProcessor
 import org.scalatest.funsuite.AnyFunSuite
+import java.time.LocalDateTime
 
 class SensorSpec extends AnyFunSuite {
+  val timestamp = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
   val inputReadings1: List[SensorReading] = List(
-    SensorReading(1, -1.0),
-    SensorReading(2, 23.1),
-    SensorReading(3, 26.0),
-    SensorReading(4, 45.4),
-    SensorReading(5, 0.0)
+    SensorReading("sensor", -1.0, timestamp),
+    SensorReading("sensor", 23.1, timestamp),
+    SensorReading("sensor", 26.0, timestamp),
+    SensorReading("sensor", 45.4, timestamp),
+    SensorReading("sensor", 0.0, timestamp)
   )
 
   test("filtering") {
     val actualResult = SensorProcessor.filterReadings(inputReadings1, 24.0)
     val expectedResult = List(
-      SensorReading(3, 26.0),
-      SensorReading(4, 45.4)
+      SensorReading("sensor", 26.0, timestamp),
+      SensorReading("sensor", 45.4, timestamp)
     )
     assert(actualResult.toSet == expectedResult.toSet)
   }
 
   val inputReadings2: List[SensorReading] = List(
-    SensorReading(1, -1.0),
-    SensorReading(2, 0.0),
-    SensorReading(3, 4.0),
+    SensorReading("sensor", -1.0, timestamp),
+    SensorReading("sensor", 0.0, timestamp),
+    SensorReading("sensor", 4.0, timestamp),
   )
 
   test("average") {
@@ -48,5 +50,12 @@ class SensorSpec extends AnyFunSuite {
     val actualResult = SensorProcessor.avgReadings_v2(List())
     val expectedResult = 0.0
     assert(actualResult == expectedResult)
+  }
+
+  test("sensor to string") {
+    val timestamp = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
+    val reading = SensorReading("sensor_1", 25.1, timestamp)
+    val expectedOutput = "2025-01-01 12:00:00, Sensor: sensor_1, Temperature: 25.1 K"
+    assert (expectedOutput == reading.toString())
   }
 }
