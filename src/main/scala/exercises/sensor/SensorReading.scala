@@ -13,4 +13,8 @@ case class SensorReading(sensor_id: String, temperature: Double, timestamp: Loca
     val formattedTimestamp = timestamp.format(formatter)
     s"$formattedTimestamp, Sensor: $sensor_id, Temperature: $temperature K"
   }
+
+  def isRecent(now: LocalDateTime,thresholdMinutes: Int): Boolean = {
+    now.minusMinutes(thresholdMinutes).isBefore(timestamp)
+  }
 }

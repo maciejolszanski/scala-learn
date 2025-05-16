@@ -58,4 +58,22 @@ class SensorSpec extends AnyFunSuite {
     val expectedOutput = "2025-01-01 12:00:00, Sensor: sensor_1, Temperature: 25.1 K"
     assert (expectedOutput == reading.toString())
   }
+
+  test("is reading recent True") {
+    val timestampNow = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
+    val timestampSensor = LocalDateTime.of(2025, 1, 1, 11, 55, 0)
+    val thresholdMinutes = 10
+    val reading = SensorReading("sensor_1", 25.1, timestampSensor)
+
+    assert(reading.isRecent(timestampNow, thresholdMinutes))
+  }
+
+  test("is reading recent False") {
+    val timestampNow = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
+    val timestampSensor = LocalDateTime.of(2025, 1, 1, 11, 55, 0)
+    val thresholdMinutes = 2
+    val reading = SensorReading("sensor_1", 25.1, timestampSensor)
+
+    assert(!reading.isRecent(timestampNow, thresholdMinutes))
+  }
 }
