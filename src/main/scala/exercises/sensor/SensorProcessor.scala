@@ -35,4 +35,8 @@ object SensorProcessor {
       acc.updated(reading.sensor_id, currList :+ reading)
     }
   }
+  
+  def avgReadingPerSensor(grouped_readings: Map[String, List[SensorReading]]): Map[String, Double] = {
+    grouped_readings.map((id, readings) => (id, avgReadings(readings)))
+  }
 }
