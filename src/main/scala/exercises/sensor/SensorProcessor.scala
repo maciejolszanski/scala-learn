@@ -25,4 +25,14 @@ object SensorProcessor {
     if count > 0 then sum / count
     else 0.0
   }
+
+  def groupReadings(readings: List[SensorReading]): Map[String, List[SensorReading]] = {
+    readings.groupBy(_.sensor_id)
+  }
+  def groupReadings_v2(readings: List[SensorReading]): Map[String, List[SensorReading]] = {
+    readings.foldLeft(Map.empty[String, List[SensorReading]]) { (acc, reading) =>
+      val currList = acc.getOrElse(reading.sensor_id, List())
+      acc.updated(reading.sensor_id, currList :+ reading)
+    }
+  }
 }

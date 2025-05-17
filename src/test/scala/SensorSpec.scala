@@ -76,4 +76,23 @@ class SensorSpec extends AnyFunSuite {
 
     assert(!reading.isRecent(timestampNow, thresholdMinutes))
   }
+  
+  test("test group readings") {
+    val inputReadings: List[SensorReading] = List(
+      SensorReading("sensor_1", -1.0, timestamp),
+      SensorReading("sensor_2", 23.1, timestamp),
+      SensorReading("sensor_2", 26.0, timestamp),
+      SensorReading("sensor_1", 45.4, timestamp),
+      SensorReading("sensor_3", 0.0, timestamp)
+    )
+    
+    val expectedOutput = Map(
+      "sensor_1" -> List(SensorReading("sensor_1", -1.0, timestamp), SensorReading("sensor_1", 45.4, timestamp)),
+      "sensor_2" -> List(SensorReading("sensor_2", 23.1, timestamp), SensorReading("sensor_2", 26.0, timestamp)),
+      "sensor_3" -> List(SensorReading("sensor_3", 0.0, timestamp))
+    )
+    val actualOutput = SensorProcessor.groupReadings_v2(inputReadings)
+    
+    assert(actualOutput == expectedOutput)
+  }
 }
