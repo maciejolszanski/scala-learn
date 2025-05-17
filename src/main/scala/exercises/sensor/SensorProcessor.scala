@@ -1,5 +1,7 @@
 package exercises.sensor
 
+import java.time.LocalDateTime
+
 object SensorProcessor {
   def filterReadings(readings: List[SensorReading], minTemperature: Double): List[SensorReading] = {
     readings.filter(x => x.isHighTemp(minTemperature))
@@ -35,8 +37,40 @@ object SensorProcessor {
       acc.updated(reading.sensor_id, currList :+ reading)
     }
   }
+
+  def avgReadingPerSensor(groupedReadings: Map[String, List[SensorReading]]): Map[String, Double] = {
+    groupedReadings.map((id, readings) => (id, avgReadings(readings)))
+  }
+
+  def getAlarmingReadings(
+    groupedReadings: Map[String, List[SensorReading]],
+    lastMinutesToCheck: Int,
+    minValidTemperature: Double,
+    now: LocalDateTime
+  ): Map[String, List[SensorReading]] = {
+
+    groupedReadings
+      .map { case (id, readings) =>
+        id -> readings.filter(_.isReadingAlarming(now, lastMinutesToCheck, minValidTemperature))
+      }
+      .filter { case (_, alarmingReadings) => alarmingReadings.nonEmpty }
+  }
   
-  def avgReadingPerSensor(grouped_readings: Map[String, List[SensorReading]]): Map[String, Double] = {
-    grouped_readings.map((id, readings) => (id, avgReadings(readings)))
+  def getAlarmingReadings_v2(
+      groupedReadings: Map[String, List[SensorReading]],
+      lastMinutesToCheck: Int,
+      minValidTemperature: Double,
+      now: LocalDateTime
+    ): Map[String, List[SensorReading]] = {
+
+    val alerts = for {
+      (id, readings) <- groupedReadings
+      alarming       =  readings.filter(
+                          _.isReadingAlarming(now, lastMinutesToCheck, minValidTemperature)
+                        )
+      if alarming.nonEmpty
+    } yield id -> alarming
+    
+    alerts
   }
 }

@@ -14,7 +14,11 @@ case class SensorReading(sensor_id: String, temperature: Double, timestamp: Loca
     s"$formattedTimestamp, Sensor: $sensor_id, Temperature: $temperature K"
   }
 
-  def isRecent(now: LocalDateTime,thresholdMinutes: Int): Boolean = {
+  def isRecent(now: LocalDateTime, thresholdMinutes: Int): Boolean = {
     now.minusMinutes(thresholdMinutes).isBefore(timestamp)
+  }
+
+  def isReadingAlarming(now: LocalDateTime, thresholdMinutes: Int, thresholdTemperature: Double): Boolean = {
+    isRecent(now, thresholdMinutes) && temperature < thresholdTemperature
   }
 }
