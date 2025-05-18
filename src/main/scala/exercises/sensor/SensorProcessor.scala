@@ -73,4 +73,22 @@ object SensorProcessor {
     
     alerts
   }
+  def determineTemperatureTrend(previousReading: SensorReading, currentReading: SensorReading): TemperatureTrend = {
+    val trend: String = {
+      if currentReading.temperature > previousReading.temperature then "rising"
+      else if currentReading.temperature < previousReading.temperature then "falling"
+      else "steady"
+    }
+
+    TemperatureTrend(previousReading, currentReading, trend)
+  }
+  def determineTemperatureTrend(readings: List[SensorReading]): List[TemperatureTrend] = {
+    readings
+      .sortBy(_.timestamp)
+      .sliding(2)
+      .collect {
+        case List(prev, curr) => determineTemperatureTrend(prev, curr)
+      }
+      .toList
+  }
 }

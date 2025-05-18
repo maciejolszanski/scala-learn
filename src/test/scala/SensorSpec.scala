@@ -1,6 +1,6 @@
-import exercises.sensor.SensorReading
-import exercises.sensor.SensorProcessor
+import exercises.sensor.{SensorProcessor, SensorReading, TemperatureTrend}
 import org.scalatest.funsuite.AnyFunSuite
+
 import java.time.LocalDateTime
 
 class SensorSpec extends AnyFunSuite {
@@ -183,6 +183,35 @@ class SensorSpec extends AnyFunSuite {
       input, thresholdMinutes, thresholdTemperature, timestampNow
     )
 
+    assert(actualOutput == expectedOutput)
+  }
+
+  test("determine temperature trends"){
+    val input = List(
+      SensorReading("sensor_1", 22.0, LocalDateTime.of(2025, 1, 1, 12, 0, 0)),
+      SensorReading("sensor_1", 21.0, LocalDateTime.of(2025, 1, 1, 12, 5, 5)),
+      SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 1, 0)),
+      SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0))
+    )
+    val expectedOutput = List(
+      TemperatureTrend(
+        SensorReading("sensor_1", 22.0, LocalDateTime.of(2025, 1, 1, 12, 0, 0)),
+        SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 1, 0)),
+        "rising"
+      ),
+      TemperatureTrend(
+        SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 1, 0)),
+        SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0)),
+        "steady"
+      ),
+      TemperatureTrend(
+        SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0)),
+        SensorReading("sensor_1", 21.0, LocalDateTime.of(2025, 1, 1, 12, 5, 5)),
+        "falling"
+      )
+    )
+
+    val actualOutput = SensorProcessor.determineTemperatureTrend(input)
     assert(actualOutput == expectedOutput)
   }
 }
