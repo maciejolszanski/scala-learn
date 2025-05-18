@@ -1,10 +1,11 @@
 import exercises.sensor.{SensorProcessor, SensorReading, TemperatureTrend}
 import org.scalatest.funsuite.AnyFunSuite
+import exercises.sensor.SensorProcessor.*
 
 import java.time.LocalDateTime
 
 class SensorSpec extends AnyFunSuite {
-  val timestamp = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
+  val timestamp: LocalDateTime = LocalDateTime.of(2025, 1, 1, 12, 0, 0)
   val inputReadings1: List[SensorReading] = List(
     SensorReading("sensor", -1.0, timestamp),
     SensorReading("sensor", 23.1, timestamp),
@@ -14,7 +15,7 @@ class SensorSpec extends AnyFunSuite {
   )
 
   test("filtering") {
-    val actualResult = SensorProcessor.filterReadings(inputReadings1, 24.0)
+    val actualResult = inputReadings1.filterReadings(24.0)
     val expectedResult = List(
       SensorReading("sensor", 26.0, timestamp),
       SensorReading("sensor", 45.4, timestamp)
@@ -29,25 +30,25 @@ class SensorSpec extends AnyFunSuite {
   )
 
   test("average") {
-    val actualResult = SensorProcessor.avgReadings(inputReadings2)
+    val actualResult = inputReadings2.avgReadings
     val expectedResult = 1.0
     assert(actualResult == expectedResult)
   }
 
   test("average v2") {
-    val actualResult = SensorProcessor.avgReadings_v2(inputReadings2)
+    val actualResult = inputReadings2.avgReadings_v2
     val expectedResult = 1.0
     assert(actualResult == expectedResult)
   }
 
   test("average empty list") {
-    val actualResult = SensorProcessor.avgReadings(List())
+    val actualResult = List().avgReadings
     val expectedResult = 0.0
     assert(actualResult == expectedResult)
   }
 
   test("average empty list v2") {
-    val actualResult = SensorProcessor.avgReadings_v2(List())
+    val actualResult = List().avgReadings_v2
     val expectedResult = 0.0
     assert(actualResult == expectedResult)
   }
@@ -91,7 +92,7 @@ class SensorSpec extends AnyFunSuite {
       "sensor_2" -> List(SensorReading("sensor_2", 23.1, timestamp), SensorReading("sensor_2", 26.0, timestamp)),
       "sensor_3" -> List(SensorReading("sensor_3", 0.0, timestamp))
     )
-    val actualOutput = SensorProcessor.groupReadings_v2(inputReadings)
+    val actualOutput = inputReadings.groupReadings_v2
 
     assert(actualOutput == expectedOutput)
   }
@@ -109,7 +110,7 @@ class SensorSpec extends AnyFunSuite {
       "sensor_3" -> 1.2
     )
 
-    val actualOutput = SensorProcessor.avgReadingPerSensor(input)
+    val actualOutput = input.avgReadingPerSensor
     assert(actualOutput == expectedOutput)
   }
 
@@ -154,9 +155,7 @@ class SensorSpec extends AnyFunSuite {
       "sensor_3" -> List(SensorReading("sensor_3", 1.2, timestampRecent), SensorReading("sensor_3", 1.3, timestampRecent))
     )
 
-    val actualOutput = SensorProcessor.getAlarmingReadings(
-      input, thresholdMinutes, thresholdTemperature, timestampNow
-    )
+    val actualOutput = input.getAlarmingReadings(thresholdMinutes, thresholdTemperature, timestampNow)
 
     assert(actualOutput == expectedOutput)
   }
@@ -179,9 +178,7 @@ class SensorSpec extends AnyFunSuite {
       "sensor_3" -> List(SensorReading("sensor_3", 1.2, timestampRecent), SensorReading("sensor_3", 1.3, timestampRecent))
     )
 
-    val actualOutput = SensorProcessor.getAlarmingReadings_v2(
-      input, thresholdMinutes, thresholdTemperature, timestampNow
-    )
+    val actualOutput = input.getAlarmingReadings_v2(thresholdMinutes, thresholdTemperature, timestampNow)
 
     assert(actualOutput == expectedOutput)
   }
@@ -211,7 +208,7 @@ class SensorSpec extends AnyFunSuite {
       )
     )
 
-    val actualOutput = SensorProcessor.determineTemperatureTrend(input)
+    val actualOutput = input.determineTemperatureTrend
     assert(actualOutput == expectedOutput)
   }
 }

@@ -1,8 +1,8 @@
 package exercises.sensor
 
 case class TemperatureTrend(
-                           previous: SensorReading,
-                           current: SensorReading,
-                           trend: String
-                           ) {
+   previous: SensorReading,
+   current: SensorReading,
+   trend: String
+) {
 }
