@@ -14,7 +14,7 @@ object SensorProcessor {
     TemperatureTrend(previousReading, currentReading, trend)
   }
 
-  extension( readings: List[SensorReading]) {
+  extension(readings: List[SensorReading]) {
     def filterReadings(minTemperature: Double): List[SensorReading] = {
       readings.filter(x => x.isHighTemp(minTemperature))
     }
@@ -65,11 +65,10 @@ object SensorProcessor {
       println(s"Average temp: $avg")
       readings.filter(x => (x.temperature - avg).abs > threshold)
     }
-    
-//    def summarize(threshold_high: Double): Map(String, SensorSummary) = {
-//      readings.map(x => (x, x.timestamp.))
-//      ???
-//    }
+
+    def summarize(threshold_high: Double): Map[String, SensorSummary]= {
+      readings.groupBy(_.createHourString).createHourSummary(threshold_high)
+    }
   }
 
   extension (groupedReadings: Map[String, List[SensorReading]]) {
@@ -104,5 +103,27 @@ object SensorProcessor {
 
       alerts
     }
+
+    def createHourSummary(threshold_high: Double): Map[String, SensorSummary] = {
+      groupedReadings.map { case(hourString, readings) =>
+        hourString -> SensorSummary(
+          hour = hourString,
+          count = readings.length,
+          avg = readings.avgReadings,
+          min = readings.map(_.temperature).min,
+          max = readings.map(_.temperature).max,
+          highCount = readings.filter(_.isHighTemp(threshold_high)).length,
+        )
+      }
+    }
+    
   }
 }
+
+//HashMap(
+//  "2025-01-01 12:00-12:59" -> SensorSummary("2025-01-01 12:00-12:59", 4, 72.75, 21.0, 225.0, 1),
+//  "2025-01-01 13:00-13:59" -> SensorSummary("2025-01-01 13:00-13:59", 3, 26.0, 25.0, 27.0, 2)) 
+//did not equal 
+//
+//Map("2025-01-01 12:00-12:59" -> SensorSummary("2025-01-01: 12:00 - 13:00", 4, 72.75, 21.0, 225.0, 1),
+//  "2025-01-01 13:00-13:59" -> SensorSummary("2025-01-01: 13:00 - 14:00", 3, 26.0, 25.0, 27.0, 1)) 
