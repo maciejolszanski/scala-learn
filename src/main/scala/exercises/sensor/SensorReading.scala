@@ -21,4 +21,12 @@ case class SensorReading(sensor_id: String, temperature: Double, timestamp: Loca
   def isReadingAlarming(now: LocalDateTime, thresholdMinutes: Int, thresholdTemperature: Double): Boolean = {
     isRecent(now, thresholdMinutes) && temperature < thresholdTemperature
   }
+
+  def createHourString: String = {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val date = timestamp.format(formatter)
+    val hour = timestamp.getHour
+
+    s"$date $hour:00-$hour:59"
+  }
 }

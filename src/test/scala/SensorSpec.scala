@@ -1,4 +1,4 @@
-import exercises.sensor.{SensorProcessor, SensorReading, TemperatureTrend}
+import exercises.sensor.{SensorProcessor, SensorReading, TemperatureTrend, SensorSummary}
 import org.scalatest.funsuite.AnyFunSuite
 import exercises.sensor.SensorProcessor.*
 
@@ -217,14 +217,41 @@ class SensorSpec extends AnyFunSuite {
       SensorReading("sensor_1", 22.0, LocalDateTime.of(2025, 1, 1, 12, 0, 0)),
       SensorReading("sensor_1", 21.0, LocalDateTime.of(2025, 1, 1, 12, 5, 5)),
       SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 1, 0)),
-      SensorReading("sensor_1", 225.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0))
+      SensorReading("sensor_1", 35.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0))
     )
     val expectedOutput = List(
-      SensorReading("sensor_1", 225.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0))
+      SensorReading("sensor_1", 35.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0))
     )
 
-    val actualOutput = input.getOutliers(2.0)
+    val actualOutput = input.getOutliers(5)
     assert(actualOutput == expectedOutput)
   }
 
+  test ("test get hour string"){
+    val actualOutput = SensorReading("sensor_1", 22.0, LocalDateTime.of(2025, 1, 1, 12, 0, 0)).createHourString
+    val expectedOutput = "2025-01-01 12:00-12:59"
+
+    assert(actualOutput == expectedOutput)
+  }
+
+//  test("test Sensor summary") {
+//    val input = List(
+//      SensorReading("sensor_1", 22.0, LocalDateTime.of(2025, 1, 1, 12, 0, 0)),
+//      SensorReading("sensor_1", 21.0, LocalDateTime.of(2025, 1, 1, 12, 1, 5)),
+//      SensorReading("sensor_1", 23.0, LocalDateTime.of(2025, 1, 1, 12, 2, 0)),
+//      SensorReading("sensor_1", 225.0, LocalDateTime.of(2025, 1, 1, 12, 3, 0)),
+//      SensorReading("sensor_1", 25.0, LocalDateTime.of(2025, 1, 1, 13, 0, 0)),
+//      SensorReading("sensor_1", 26.0, LocalDateTime.of(2025, 1, 1, 13, 1, 5)),
+//      SensorReading("sensor_1", 27.0, LocalDateTime.of(2025, 1, 1, 13, 2, 0)),
+//    )
+//
+//    val expectedOutput = Map(
+//      "2025-01-01 12:00-12:59" -> SensorSummary("2025-01-01: 12:00 - 13:00", 4, 72.75, 21.0, 225.0, 1),
+//      "2025-01-01 13:00-13:59" -> SensorSummary("2025-01-01: 13:00 - 14:00", 3, 26.0, 25.0, 27.0, 1)
+//    )
+//
+//    val actualOutput = input.summarize()
+//
+//    assert(actualOutput == expectedOutput)
+//  }
 }

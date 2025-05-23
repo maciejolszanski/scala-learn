@@ -62,8 +62,14 @@ object SensorProcessor {
 
     def getOutliers(threshold: Double): List[SensorReading] = {
       val avg: Double = readings.avgReadings
+      println(s"Average temp: $avg")
       readings.filter(x => (x.temperature - avg).abs > threshold)
     }
+    
+//    def summarize(threshold_high: Double): Map(String, SensorSummary) = {
+//      readings.map(x => (x, x.timestamp.))
+//      ???
+//    }
   }
 
   extension (groupedReadings: Map[String, List[SensorReading]]) {
